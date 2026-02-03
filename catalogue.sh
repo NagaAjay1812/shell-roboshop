@@ -66,7 +66,7 @@ VALIDATE $? "unzip the code"
 cd /app 
 VALIDATE $? "change directory to app"
 
-rm -rf node_modules package-lock.json  #if modules or dependencies already installed first we will remove again we will install
+rm -rf node_modules package-lock.json &>> $LOGS_FILE #if modules or dependencies already installed first we will remove again we will install
 npm install &>> $LOGS_FILE
 VALIDATE $? "read form index.json and installing depenencies using npm build tool"
 
@@ -75,5 +75,33 @@ VALIDATE $? "copying the catalogue service and updated mongodb DNS record"
 
 systemctl daemon-reload &>> $LOGS_FILE
 VALIDATE $? "daemon-reloaded"
+
+systemctl enable catalogue &>> $LOGS_FILE
+systemctl start catalogue &>> $LOGS_FILE
+VALIDATE $? "Enable and start the catalogue service"
+
+cp -n mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGS_FILE # skipping if repo is already opied
+VALIDATE $? "cpy the mongo repo"
+
+dnf install mongodb-mongosh -y &>> $LOGS_FILE
+VALIDATE $? "Install mongo client"
+
+mongosh --host mongodb.cloudkarna.in </app/db/master-data.js
+VALIDATE $? "Connect to mongo DB and Load the master data "
+
+mongosh --host mongodb.cloudkarna.in 
+VALIDATE $? "Connect to mongo DB"
+
+show dbs
+VALIDATE $? "show dbs"
+
+use catalogue
+VALIDATE $? "Using catalogue"
+
+show collections
+VALIDATE $? "show collections"
+
+db.products.find()
+VALIDATE $? "show products"
 
  
