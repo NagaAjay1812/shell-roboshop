@@ -41,9 +41,9 @@ else
     echo -e "nodejs is already installed, $Y SKIPPING $N" | tee -a $LOGS_FILE
 fi
 
-id roboshop &>> $LOGS_FILE
+id roboshop &>> $LOGS_FILE   # idempotency: if you perform operation multiple times the end result would be same 
 if [ $? -ne 0 ]; then 
-echo "System user is not creatde, Now creating system user"
+echo "System user is not created, now creating system user"         
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>> $LOGS_FILE
     VALIDATE $? "Adding System User"
 else
@@ -51,7 +51,7 @@ else
 
 fi
 
-mkdir -p /app &>> $LOGS_FILE
+mkdir -p /app &>> $LOGS_FILE   # if directory is already existed skip to create the direcory again
 VALIDATE $? "Creating directory"
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>> $LOGS_FILE
@@ -60,7 +60,7 @@ VALIDATE $? "Downloding code from s3 location"
 cd /app &>> $LOGS_FILE
 VALIDATE $? "change directory to app"
 
-unzip -o /tmp/catalogue.zip &>> $LOGS_FILE
+unzip -o /tmp/catalogue.zip &>> $LOGS_FILE    # o - means overwriting if catalogue is already unzipped it will overwrite those files
 VALIDATE $? "unzip the code"
 
 cd /app 
@@ -70,7 +70,7 @@ rm -rf node_modules package-lock.json  #if modules or dependencies already insta
 npm install &>> $LOGS_FILE
 VALIDATE $? "read form index.json and installing depenencies using npm build tool"
 
-cp catalogue.service /etc/systemd/system/ &>> $LOGS_FILE
+cp catalogue.service /etc/systemd/system/catalogue.service &>> $LOGS_FILE
 VALIDATE $? "copying the catalogue service and updated mongodb DNS record"
 
 systemctl daemon-reload &>> $LOGS_FILE
