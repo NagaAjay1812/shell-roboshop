@@ -60,12 +60,13 @@ VALIDATE $? "Downloding code from s3 location"
 cd /app &>> $LOGS_FILE
 VALIDATE $? "change directory to app"
 
-unzip /tmp/catalogue.zip &>> $LOGS_FILE
+unzip -o /tmp/catalogue.zip &>> $LOGS_FILE
 VALIDATE $? "unzip the code"
 
 cd /app 
 VALIDATE $? "change directory to app"
 
+rm -rf node_modules package-lock.json  #if modules or dependencies already installed first we will remove again we will install
 npm install &>> $LOGS_FILE
 VALIDATE $? "read form index.json and installing depenencies using npm build tool"
 
