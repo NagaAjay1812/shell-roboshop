@@ -29,7 +29,7 @@ VALIDATE(){
 
 dnf list installed mysql-server &>> $LOGS_FILE
 if [ $? -ne 0 ]; then
-    echo " MySQL not insatlled, insatlling now" | tee -a $LOGS_FILE
+    echo " MySQL is not installed, installing now" | tee -a $LOGS_FILE
     dnf install mysql-server -y &>> $LOGS_FILE
     VALIDATE $? "Installing MySQL"
 else
