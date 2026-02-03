@@ -62,7 +62,7 @@ VALIDATE $? "change directory to app"
 npm install &>> $LOGS_FILE
 VALIDATE $? "read form index.json and installing depenencies using npm build tool"
 
-cp catalogue.service /etc/systemd/system/catalogue.service &>> $LOGS_FILE
+cp catalogue.service /etc/systemd/system/catalogue.service/ &>> $LOGS_FILE
 VALIDATE $? "copying the catalogue service and updated mongodb DNS record"
 
 systemctl daemon-reload &>> $LOGS_FILE
