@@ -3,7 +3,8 @@ USERID=$(id -u)
 
 LOGS_FOLDER="/var/log/shell-roboshop"
 LOGS_FILE="/var/log/shell-roboshop/$0.log"
-
+SCRIPT_DIR=$PWD
+MONGODB_HOST=mongodb.cloudkarna.in
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
@@ -60,7 +61,7 @@ VALIDATE $? "Downloding code from s3 location"
 cd /app &>> $LOGS_FILE
 VALIDATE $? "change directory to app"
 
-unzip -o /tmp/catalogue.zip &>> $LOGS_FILE    # o - means overwriting if catalogue is already unzipped it will overwrite those files
+unzip -o /tmp/catalogue.zip &>> $LOGS_FILE    # o - means overwriting if catalogue is already unzipped it will overwrite those files or you can remove entire app rm -rf /app/*
 VALIDATE $? "unzip the code"
 
 cd /app 
@@ -70,7 +71,7 @@ rm -rf node_modules package-lock.json &>> $LOGS_FILE #if modules or dependencies
 npm install &>> $LOGS_FILE
 VALIDATE $? "read form index.json and installing depenencies using npm build tool"
 
-cp catalogue.service /etc/systemd/system/catalogue.service &>> $LOGS_FILE
+cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service &>> $LOGS_FILE
 VALIDATE $? "copying the catalogue service and updated mongodb DNS record"
 
 systemctl daemon-reload &>> $LOGS_FILE
@@ -80,16 +81,16 @@ systemctl enable catalogue &>> $LOGS_FILE
 systemctl start catalogue &>> $LOGS_FILE
 VALIDATE $? "Enable and start the catalogue service"
 
-cp -n mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGS_FILE # skipping if repo is already opied
+cp  $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGS_FILE
 VALIDATE $? "cpy the mongo repo"
 
 dnf install mongodb-mongosh -y &>> $LOGS_FILE
 VALIDATE $? "Install mongo client"
 
-mongosh --host mongodb.cloudkarna.in </app/db/master-data.js
+mongosh --host $MONGODB_HOST </app/db/master-data.js
 VALIDATE $? "Connect to mongo DB and Load the master data "
 
-mongosh --host mongodb.cloudkarna.in 
+mongosh --host $MONGODB_HOST
 VALIDATE $? "Connect to mongo DB"
 
 show dbs
