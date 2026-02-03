@@ -33,7 +33,7 @@ if [ $? -ne 0 ]; then
     dnf install mysql-server -y &>> $LOGS_FILE
     VALIDATE $? "Installing MySQL"
 else
-    echo "MySQL is already installed $Y SKIPPING $N" | tee -a $LOGS_FILE
+    echo -e "MySQL is already installed $Y SKIPPING $N" | tee -a $LOGS_FILE
 fi
 
 systemctl enable mysqld &>> $LOGS_FILE
