@@ -37,10 +37,10 @@ else
     echo "mongoDB is already installed $Y SKIPPED $N"
 fi
 
-systemctl enable mongod 
+systemctl enable mongod &>> $LOGS_FILE
 VALIDATE $? "enable mongoDB service" 
 
-systemctl start mongod 
+systemctl start mongod &>> $LOGS_FILE
 VALIDATE $? "start mongoDB service" 
 
 sed -i '/s/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>> $LOGS_FILE
