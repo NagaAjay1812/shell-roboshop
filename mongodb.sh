@@ -29,21 +29,21 @@ VALIDATE(){
 cp mongo.repo /etc/yum.repos.d/
 VALIDATE $? "Copying mongo repo"
 
-dnf list installed mongodb
+dnf list installed mongodb-org
 if [ $? -ne 0 ]; then
-    dnf install mongodb-org -y 
-    VALIDATE $? "Installing mongoDB server" &>> $LOGS_FILE
+    dnf install mongodb-org -y &>> $LOGS_FILE
+    VALIDATE $? "Installing mongoDB server" 
 else
     echo "mongoDB is already installed $Y SKIPPED $N"
 fi
 
 systemctl enable mongod 
-VALIDATE $? "start mongoDB" &>> $LOGS_FILE
+VALIDATE $? "enable mongoDB service" 
 
 systemctl start mongod 
-VALIDATE $? "enable the mongoDB" &>> $LOGS_FILE
+VALIDATE $? "start mongoDB service" 
 
-sed - i '/s/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>> $LOGS_FILE
+sed -i '/s/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>> $LOGS_FILE
 VALIDATE $? "Allowing the remote access"
 
 systemctl restart mongod &>> $LOGS_FILE
