@@ -4,9 +4,10 @@ SG_ID="sg-0b1f7c3d25067bf9a"
 AMI_ID="ami-0220d79f3f480ecf5"
 SUBNET_ID="subnet-0bb417478919bf408"
 
-for INSTANCE in "$@"; do
+for INSTANCE in $@
+ do
 
-  INSTANCE_ID=$(aws ec2 run-instances \
+  INSTANCE_ID=$( aws ec2 run-instances \
     --image-id "$AMI_ID" \
     --instance-type t3.micro \
     --subnet-id "$SUBNET_ID" \
@@ -14,7 +15,7 @@ for INSTANCE in "$@"; do
     --associate-public-ip-address \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE}]" \
     --query "Instances[0].InstanceId" \
-    --output text)
+    --output text )
 
   if [[ "$INSTANCE" == "frontend" ]]; then
     IP=$(aws ec2 describe-instances \
@@ -28,6 +29,6 @@ for INSTANCE in "$@"; do
       --output text)
   fi
 
-  echo "$INSTANCE  $IP"
+  echo "$INSTANCE, Ip adress: $IP"
 
 done
