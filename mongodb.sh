@@ -19,10 +19,10 @@ fi
 
 VALIDATE(){ 
     if [ $1 -ne 0 ]; then
-        echo -e "$2..... $R Failure $N" | tee -a $LOGS_FILE
+        echo -e "$2.....$R Failure $N" | tee -a $LOGS_FILE
         exit 1
     else
-        echo -e "$2..... $G Success $N" | tee -a $LOGS_FILE
+        echo -e "$2.....$G Success $N" | tee -a $LOGS_FILE
     fi
 }
 
@@ -44,7 +44,7 @@ systemctl start mongod
 VALIDATE $? "start mongoDB service" 
 
 sed -i '/s/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>> $LOGS_FILE
-VALIDATE $? "Allowing the remote access"
+VALIDATE $? "Allowing the remote connection"
 
 systemctl restart mongod &>> $LOGS_FILE
 VALIDATE $? "Restart mongoDB"
