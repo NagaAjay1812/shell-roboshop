@@ -93,16 +93,6 @@ VALIDATE $? "Connect to mongo DB and Load the master data "
 mongosh --host $MONGODB_HOST
 VALIDATE $? "Connect to mongo DB"
 
-show dbs
-VALIDATE $? "show dbs"
 
-use catalogue
-VALIDATE $? "Using catalogue"
-
-show collections
-VALIDATE $? "show collections"
-
-db.products.find()
-VALIDATE $? "show products"
 
  
