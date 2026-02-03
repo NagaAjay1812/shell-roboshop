@@ -41,16 +41,22 @@ else
     echo -e "nodejs is already installed, $Y SKIPPING $N" | tee -a $LOGS_FILE
 fi
 
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
-VALIDATE $? "Adding System User"
+id roboshop &>> $LOGS_FILE
+if [ $? -ne 0 ]; then 
+echo "System user is not creatde, Now creating system user"
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>> $LOGS_FILE
+    VALIDATE $? "Adding System User"
+else
+    echo -e "System user is already created, $Y SKIPPING $N"
 
-mkdir /app 
+
+mkdir /app &>> $LOGS_FILE
 VALIDATE $? "Creating directory"
 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
+curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>> $LOGS_FILE
 VALIDATE $? "Downloding code from s3 location"
 
-cd /app 
+cd /app &>> $LOGS_FILE
 VALIDATE $? "change directory to app"
 
 unzip /tmp/catalogue.zip &>> $LOGS_FILE
