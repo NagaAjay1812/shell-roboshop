@@ -49,8 +49,9 @@ echo "System user is not creatde, Now creating system user"
 else
     echo -e "System user is already created, $Y SKIPPING $N"
 
+fi
 
-mkdir /app &>> $LOGS_FILE
+mkdir -p /app &>> $LOGS_FILE
 VALIDATE $? "Creating directory"
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>> $LOGS_FILE
@@ -68,7 +69,7 @@ VALIDATE $? "change directory to app"
 npm install &>> $LOGS_FILE
 VALIDATE $? "read form index.json and installing depenencies using npm build tool"
 
-cp catalogue.service /etc/systemd/system/catalogue.service/ &>> $LOGS_FILE
+cp catalogue.service /etc/systemd/system/ &>> $LOGS_FILE
 VALIDATE $? "copying the catalogue service and updated mongodb DNS record"
 
 systemctl daemon-reload &>> $LOGS_FILE
