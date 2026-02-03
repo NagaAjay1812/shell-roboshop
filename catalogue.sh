@@ -53,19 +53,19 @@ VALIDATE $? "Downloding code from s3 location"
 cd /app 
 VALIDATE $? "change directory to app"
 
-unzip /tmp/catalogue.zip
+unzip /tmp/catalogue.zip &>> $LOGS_FILE
 VALIDATE $? "unzip the code"
 
 cd /app 
 VALIDATE $? "change directory to app"
 
-npm install 
+npm install &>> $LOGS_FILE
 VALIDATE $? "read form index.json and installing depenencies using npm build tool"
 
-cp catalogue.service /etc/systemd/system/catalogue.service
+cp catalogue.service /etc/systemd/system/catalogue.service &>> $LOGS_FILE
 VALIDATE $? "copying the catalogue service and updated mongodb DNS record"
 
-systemctl daemon-reload
+systemctl daemon-reload &>> $LOGS_FILE
 VALIDATE $? "daemon-reloaded"
 
  
