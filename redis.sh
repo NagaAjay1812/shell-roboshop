@@ -35,13 +35,13 @@ if [ $? -ne 0 ]; then
     dnf install redis -y  &>> $LOGS_FILE
     VALIDATE $? "Installing redis server" 
 else
-    echo "redis is already installed $Y SKIPPED $N" | tee -a $LOGS_FILE
+    echo -e "redis is already installed $Y SKIPPED $N" | tee -a $LOGS_FILE
 fi
 
-sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/protected-mode no' /etc/redis.conf &>> "$LOGS_FILE"
+sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected-mode no' /etc/redis.conf &>> "$LOGS_FILE"
 VALIDATE $? "Allowing the remote connection"
 
-systemctl enable redis 
+systemctl enable redis &>> $LOGS_FILE
 systemctl start redis &>> $LOGS_FILE
 VALIDATE $? "Enable and start redis service" 
 
