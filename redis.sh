@@ -26,19 +26,19 @@ VALIDATE(){
     fi
 }
 
-dnf module disable redis -y
-dnf module enable redis:7 -y
+dnf module disable redis -y &>> $LOGS_FILE
+dnf module enable redis:7 -y &>> $LOGS_FILE
 VALIDATE $? "Disable the default version of redis and enable the version:7 "
 
-dnf list installed redis
+dnf list installed redis &>> $LOGS_FILE
 if [ $? -ne 0 ]; then
     dnf install redis -y  &>> $LOGS_FILE
     VALIDATE $? "Installing redis server" 
 else
-    echo "redis is already installed $Y SKIPPED $N"
+    echo "redis is already installed $Y SKIPPED $N" | tee -a $LOGS_FILE
 fi
 
-sed -i -e 's/127.0.0.1/0.0.0.0/g' -e //protected-mode/protected-mode no' /etc/redis.conf &>> "$LOGS_FILE"
+sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/protected-mode no' /etc/redis.conf &>> "$LOGS_FILE"
 VALIDATE $? "Allowing the remote connection"
 
 systemctl enable redis 
