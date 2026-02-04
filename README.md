@@ -9,26 +9,39 @@ Instead of a single-server setup, the application is intentionally split into in
 
 ## 🧩 Architecture Diagram
 
-User / Browser
-   |
-   v
-Route53 DNS (cloudkarna.in)
-   |
-   v
-Frontend EC2
-   |
-   v
-Nginx Reverse Proxy
-   |
-   +--> Catalogue Service EC2  ---> MongoDB EC2
-   |
-   +--> User Service EC2       ---> MongoDB EC2
-   |
-   +--> Cart Service EC2       ---> Redis EC2
-   |
-   +--> Shipping Service EC2   ---> MySQL EC2
-   |
-   +--> Payment Service EC2    ---> RabbitMQ EC2
+┌───────────────┐
+│ User / Browser│
+└───────┬───────┘
+        │
+        ▼
+┌──────────────────────────┐
+│ Route53 DNS (cloudkarna.in)│
+└──────────┬───────────────┘
+           │
+           ▼
+┌────────────────┐
+│ Frontend EC2   │
+│ (Nginx + UI)   │
+└────────┬───────┘
+         │
+         ▼
+┌────────────────────────┐
+│ Nginx Reverse Proxy    │
+│ (API Routing Layer)   │
+└───────┬─────┬─────┬───┬─────┘
+        │     │     │   │
+        ▼     ▼     ▼   ▼
+┌──────────┐ ┌──────────┐ ┌──────────┐ ┌────────────┐ ┌────────────┐
+│Catalogue │ │User      │ │Cart      │ │Shipping    │ │Payment     │
+│Service  │ │Service   │ │Service   │ │Service     │ │Service     │
+│EC2      │ │EC2       │ │EC2       │ │EC2         │ │EC2         │
+└────┬─────┘ └────┬─────┘ └────┬─────┘ └────┬────────┘ └────┬────────┘
+     │             │             │              │               │
+     ▼             ▼             ▼              ▼               ▼
+┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐
+│MongoDB   │ │MongoDB   │ │Redis     │ │MySQL     │ │RabbitMQ  │
+│EC2       │ │EC2       │ │EC2       │ │EC2       │ │EC2       │
+└──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘
 
 
 ---
