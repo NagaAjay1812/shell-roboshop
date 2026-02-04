@@ -8,7 +8,7 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 SCRIPT_DIR=$PWD
-MYSQL_HOST=mysql.cloudkarna.in
+
 
 if [ $USERID -ne 0 ]; then
     echo -e "$R Please run this script with root user access $N" | tee -a $LOGS_FILE
@@ -36,7 +36,7 @@ echo "System user is not created, now creating system user"
     VALIDATE $? "Adding System User"
 else
     echo -e "System user is already created, $Y SKIPPING $N"
-
+fi
 mkdir -p /app 
 VALIDATE $? "Creating app directory"
 
@@ -59,7 +59,7 @@ VALIDATE $? "Installing dependencies"
 cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service
 VALIDATE $? "Created systemctl service"
 
-systemctl daemon-reload
+systemctl daemon-reload &>>$LOGS_FILE
 systemctl enable payment &>>$LOGS_FILE
-systemctl start payment
+systemctl start payment &>>$LOGS_FILE
 VALIDATE $? "Enabled and started payment"
