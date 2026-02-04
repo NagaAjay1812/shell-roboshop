@@ -37,7 +37,7 @@ VALIDATE $? "Enable nginx:24 version"
 dnf list installed nginx &>> $LOGS_FILE
 if [ $? -ne 0 ]; then
     echo "nginx is  not installed, installing now" | tee -a $LOGS_FILE
-    dnf install ginx -y &>> $LOGS_FILE
+    dnf install nginx -y &>> $LOGS_FILE
     VALIDATE $? "Installing nginx"
 else
     echo -e "nginx is already installed, $Y SKIPPING $N" | tee -a $LOGS_FILE
