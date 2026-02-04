@@ -9,7 +9,27 @@ Instead of a single-server setup, the application is intentionally split into in
 
 ## 🧩 Architecture Diagram
 
-![Microservices Architecture on AWS](architecture/microservices-architecture.png)
+User / Browser
+   |
+   v
+Route53 DNS (cloudkarna.in)
+   |
+   v
+Frontend EC2
+   |
+   v
+Nginx Reverse Proxy
+   |
+   +--> Catalogue Service EC2  ---> MongoDB EC2
+   |
+   +--> User Service EC2       ---> MongoDB EC2
+   |
+   +--> Cart Service EC2       ---> Redis EC2
+   |
+   +--> Shipping Service EC2   ---> MySQL EC2
+   |
+   +--> Payment Service EC2    ---> RabbitMQ EC2
+
 
 ---
 
