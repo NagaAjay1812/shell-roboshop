@@ -32,11 +32,12 @@ VALIDATE $? "Installing Python"
 id roboshop &>> $LOGS_FILE   # idempotency: if you perform operation multiple times the end result would be same 
 if [ $? -ne 0 ]; then 
 echo "System user is not created, now creating system user"         
-    rabbitmqctl add_user roboshop roboshop123 &>> $LOGS_FILE
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>> $LOGS_FILE
     VALIDATE $? "Adding System User"
 else
     echo -e "System user is already created, $Y SKIPPING $N"
 fi
+
 mkdir -p /app 
 VALIDATE $? "Creating app directory"
 
