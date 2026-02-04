@@ -51,6 +51,7 @@ echo "System user is not created, now creating system user"
     VALIDATE $? "Adding System User"
 else
     echo -e "System user is already created, $Y SKIPPING $N"
+fi
 
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
 VALIDATE $? "set the permission"
