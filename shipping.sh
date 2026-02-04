@@ -72,8 +72,8 @@ VALIDATE $? "copying the shipping service and updated mysql and cart DNS record"
 systemctl daemon-reload &>> $LOGS_FILE
 VALIDATE $? "daemon-reloaded"
 
-systemctl enable user &>> $LOGS_FILE
-systemctl start user &>> $LOGS_FILE
+systemctl enable shipping &>> $LOGS_FILE
+systemctl start shipping &>> $LOGS_FILE
 VALIDATE $? "Enable and start the shipping service"
 
 dnf install mysql -y  &>> $LOGS_FILE
@@ -91,5 +91,5 @@ else
 fi
 
 systemctl enable shipping &>>$LOGS_FILE
-systemctl start shipping
+systemctl start shipping &>>$LOGS_FILE
 VALIDATE $? "Enabled and started shipping"
